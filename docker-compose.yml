@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  nginx:
+    image: nginx:latest
+    expose:
+      - 80
+    restart: always
+    volumes:
+      - ./html:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=krarlab.dmi.unipg.it
+    container_name: krarlab-html
+
+  php:
+    image: php:7-fpm
+    expose:
+      - 9000
+    restart: always
+    volumes:
+      - ./html:/var/www/html
+    environment:
+      - VIRTUAL_PROTO=fastcgi
+      - VIRTUAL_ROOT=/var/www/html
+    container_name: krarlab-php
+
+networks:
+  default:
+    external:
+      name: nginx-proxy-net
